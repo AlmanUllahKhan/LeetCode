@@ -11,28 +11,22 @@
  */
 class Solution {
 public:
-    vector<TreeNode*> preorder(TreeNode* root){
-        vector<TreeNode*> ans;
-        if(root==nullptr){
-            return ans;
-        }
-        ans.push_back(root);
-        vector<TreeNode*> left=preorder(root->left);
-        ans.insert(ans.end(),left.begin(),left.end());
-        vector<TreeNode*> right=preorder(root->right);
-        ans.insert(ans.end(),right.begin(),right.end());
-        return ans;
-    }
     void flatten(TreeNode* root) {
-        if(root==nullptr){
-            return;
+        TreeNode* curr=root;
+        while(curr!=nullptr){
+            if(curr->left==nullptr){
+                curr=curr->right;
+            }else{
+                TreeNode* temp=curr->left;
+                while(temp->right!=nullptr){
+                    temp=temp->right;
+                }
+                TreeNode* right_most=temp;
+                right_most->right=curr->right;
+                curr->right=curr->left;
+                curr->left=nullptr;
+                curr=curr->right;
+            }
         }
-        vector<TreeNode*> curr=preorder(root);
-        for(int i=0;i<curr.size()-1;i++){
-            curr[i]->left=nullptr;
-            curr[i]->right=curr[i+1];
-        }
-        curr[curr.size()-1]->left=nullptr;
-        curr[curr.size()-1]->right=nullptr;
     }
 };
